@@ -1,0 +1,12 @@
+{
+  "name": "loopb-auth-tests",
+  "version": "1.0.0",
+  "description": "LoopB uygulaması için otomatik auth testleri",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:report": "npx playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0"
+  }
+}
