@@ -68,7 +68,7 @@ test.describe('LoopB Auth Tests', () => {
     await page.getByRole('button', { name: 'Sign Up' }).click();
 
     // Onboarding veya dashboard'a yönlendirmeli
-    await page.waitForURL(/onboarding|dashboard/, { timeout: 20000 });
+    await page.waitForURL(/onboard|dashboard/, { timeout: 20000 });
     console.log(`✅ Yeni kullanıcı kaydı başarılı: ${NEW_USER_EMAIL}`);
   });
 
