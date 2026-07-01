@@ -59,13 +59,18 @@ jobs:
               <hr/>
               <h3>Test Edilen Senaryolar:</h3>
               <ul>
-                <li>Login sayfası erişilebilirlik kontrolü</li>
-                <li>Register sayfası erişilebilirlik kontrolü</li>
-                <li>Hatalı şifre ile giriş engelleme kontrolü</li>
-                <li>Register Email butonu görünürlük kontrolü</li>
-                <li>Login → Register yönlendirme kontrolü</li>
-                <li>Register → Login yönlendirme kontrolü</li>
+                <li>✅ Login sayfası erişilebilirlik kontrolü</li>
+                <li>✅ Register sayfası erişilebilirlik kontrolü</li>
+                <li>✅ Hatalı şifre ile giriş engelleme kontrolü</li>
+                <li>✅ Login → Register yönlendirme kontrolü</li>
+                <li>✅ Gerçek kullanıcı ile başarılı login kontrolü</li>
+                <li>✅ Yeni kullanıcı kaydı (register) kontrolü</li>
+                <li>✅ Onboarding adımlarının tamamlanması kontrolü</li>
+                <li>✅ Onboarding sonrası dashboard'a ulaşım kontrolü</li>
               </ul>
+              <hr/>
+              <p>🧪 <strong>Bu testte kullanılan register e-postası:</strong><br/>
+              loopbtest+${{ github.run_id }}@gmail.com</p>
               <hr/>
               <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
                  style="background:#6366f1;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
