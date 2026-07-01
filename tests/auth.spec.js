@@ -87,7 +87,11 @@ test.describe('LoopB Auth Tests', () => {
     console.log('✅ Onboarding Adım 3 tamamlandı (Kullanım amacı)');
 
     // ── ONBOARDING ADIM 4: Takım Daveti ───────────────────
-    // Zorunlu değil, direkt Continue
+    // Her seferinde benzersiz bir davet e-postası oluştur
+    const INVITE_EMAIL = `loopbinvite+${timestamp}@gmail.com`;
+    await page.locator('input[type="email"], input[placeholder*="email"]').fill(INVITE_EMAIL);
+    await page.waitForTimeout(500);
+    console.log(`✅ Davet e-postası girildi: ${INVITE_EMAIL}`);
     await page.getByRole('button', { name: 'Continue' }).click();
     await page.waitForTimeout(1500);
     console.log('✅ Onboarding Adım 4 tamamlandı (Takım daveti)');
