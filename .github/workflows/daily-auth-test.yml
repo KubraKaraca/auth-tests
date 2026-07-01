@@ -1,0 +1,83 @@
+name: LoopB Günlük Auth Testi
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  auth-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Kodu indir
+        uses: actions/checkout@v4
+
+      - name: 🟢 Node.js kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Bağımlılıkları yükle
+        run: npm install
+
+      - name: 🎭 Playwright tarayıcılarını yükle
+        run: npx playwright install chromium
+
+      - name: 🧪 Testleri çalıştır
+        id: run_tests
+        run: npx playwright test
+        continue-on-error: true
+
+      - name: 📊 Test sonucunu belirle
+        id: result
+        run: |
+          if [ "${{ steps.run_tests.outcome }}" == "success" ]; then
+            echo "status=✅ BAŞARILI" >> $GITHUB_OUTPUT
+            echo "emoji=✅" >> $GITHUB_OUTPUT
+          else
+            echo "status=❌ BAŞARISIZ" >> $GITHUB_OUTPUT
+            echo "emoji=❌" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 📧 E-posta bildirimi gönder
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "${{ steps.result.outputs.emoji }} LoopB Auth Test Sonucu — ${{ steps.result.outputs.status }}"
+          to: karacakubra89@gmail.com
+          from: LoopB Test Sistemi <${{ secrets.MAIL_USERNAME }}>
+          html_body: |
+            <div style="font-family: Arial, sans-serif; max-width: 600px;">
+              <h2>🔐 LoopB Auth Test Raporu</h2>
+              <p><strong>Sonuç:</strong> ${{ steps.result.outputs.status }}</p>
+              <hr/>
+              <h3>Test Edilen Senaryolar:</h3>
+              <ul>
+                <li>Login sayfası erişilebilirlik kontrolü</li>
+                <li>Register sayfası erişilebilirlik kontrolü</li>
+                <li>Hatalı şifre ile giriş engelleme kontrolü</li>
+                <li>Register Email butonu görünürlük kontrolü</li>
+                <li>Login → Register yönlendirme kontrolü</li>
+                <li>Register → Login yönlendirme kontrolü</li>
+              </ul>
+              <hr/>
+              <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                 style="background:#6366f1;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
+                📋 Detaylı Raporu Gör
+              </a>
+              <p style="color:#888;font-size:12px;">Bu mail otomatik gönderilmiştir.</p>
+            </div>
+
+      - name: 📁 Test raporunu kaydet
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
