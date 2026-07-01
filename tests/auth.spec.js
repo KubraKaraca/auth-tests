@@ -1,9 +1,5 @@
 const { test, expect } = require('@playwright/test');
 
-const timestamp = Date.now();
-const TEST_EMAIL = `test+${timestamp}@gmail.com`;
-const TEST_PASSWORD = 'TestPass123!';
-
 test.describe('LoopB Auth Tests', () => {
 
   test('1 - Login sayfası açılıyor mu?', async ({ page }) => {
@@ -20,10 +16,10 @@ test.describe('LoopB Auth Tests', () => {
 
   test('3 - Hatalı şifre ile login başarısız olmalı', async ({ page }) => {
     await page.goto('https://app.loopb.com/auth/login');
-    await page.fill('input[type="email"], input[placeholder*="Email"], input[placeholder*="Contact"]', 'yanlis@email.com');
-    await page.fill('input[type="password"]', 'YanlisŞifre999!');
-    await page.click('button[type="submit"], button:has-text("Login")');
-    await page.waitForTimeout(2000);
+    await page.locator('input').first().fill('yanlis@email.com');
+    await page.locator('input[type="password"]').fill('YanlisŞifre999!');
+    await page.locator('button').filter({ hasText: 'Login' }).click();
+    await page.waitForTimeout(3000);
     const currentUrl = page.url();
     expect(currentUrl).not.toContain('/dashboard');
     console.log('✅ Hatalı girişte yönlendirme yapılmadı');
