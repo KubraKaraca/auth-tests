@@ -74,8 +74,8 @@ test.describe('LoopB Auth Tests', () => {
 
     // ── ONBOARDING ADIM 2: Şirket Kurulumu ────────────────
     // Şirket adını temizle ve "Hipposoft Test" yaz
-    await page.locator('input').first().clear();
-    await page.locator('input').first().fill('Hipposoft Test');
+    await page.locator('#companyName').clear();
+    await page.locator('#companyName').fill('Hipposoft Test');
     await page.getByRole('button', { name: 'Continue' }).click();
     await page.waitForTimeout(1500);
     console.log('✅ Onboarding Adım 2 tamamlandı (Şirket)');
