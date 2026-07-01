@@ -40,6 +40,12 @@ jobs:
             echo "status=❌ BAŞARISIZ" >> $GITHUB_OUTPUT
             echo "emoji=❌" >> $GITHUB_OUTPUT
           fi
+          # Test sırasında kullanılan email adresini oku
+          if [ -f test-email.txt ]; then
+            echo "test_email=$(cat test-email.txt)" >> $GITHUB_OUTPUT
+          else
+            echo "test_email=okunamadı" >> $GITHUB_OUTPUT
+          fi
 
       - name: 📧 E-posta bildirimi gönder
         uses: dawidd6/action-send-mail@v3
@@ -70,7 +76,7 @@ jobs:
               </ul>
               <hr/>
               <p>🧪 <strong>Bu testte kullanılan register e-postası:</strong><br/>
-              loopbtest+${{ github.run_id }}@gmail.com</p>
+              ${{ steps.result.outputs.test_email }}</p>
               <hr/>
               <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
                  style="background:#6366f1;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
