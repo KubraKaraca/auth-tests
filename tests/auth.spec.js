@@ -4,6 +4,10 @@ const timestamp = Date.now();
 const NEW_USER_EMAIL = `loopbtest+${timestamp}@gmail.com`;
 const NEW_USER_PASSWORD = 'TestPass1';
 
+// Email adresini dosyaya yaz, workflow okusun
+const fs = require('fs');
+fs.writeFileSync('test-email.txt', NEW_USER_EMAIL);
+
 test.describe('LoopB Auth Tests', () => {
 
   test('1 - Login sayfası açılıyor mu?', async ({ page }) => {
