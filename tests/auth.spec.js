@@ -60,7 +60,13 @@ test.describe('LoopB Auth Tests', () => {
     await page.locator('input[placeholder*="first name"]').fill('Test');
     await page.locator('input[placeholder*="last name"]').fill('Kullanici');
     // İlk zorunlu checkbox'ı işaretle
-    await page.locator('input[type="checkbox"]').first().check();
+    // Checkbox'ı birkaç farklı yöntemle dene
+    try {
+    await page.locator('input[type="checkbox"]').first().check({ force: true });
+    } catch {
+    await page.locator('[role="checkbox"]').first().click({ force: true });
+    }
+    await page.waitForTimeout(500);
     await page.getByRole('button', { name: 'Continue' }).click();
     await page.waitForTimeout(1500);
     console.log('✅ Onboarding Adım 1 tamamlandı (Ad/Soyad)');
