@@ -61,11 +61,8 @@ test.describe('LoopB Auth Tests', () => {
     await page.locator('input[placeholder*="last name"]').fill('Kullanici');
     // İlk zorunlu checkbox'ı işaretle
     // Checkbox'ı birkaç farklı yöntemle dene
-    try {
-    await page.locator('input[type="checkbox"]').first().check({ force: true });
-    } catch {
-    await page.locator('[role="checkbox"]').first().click({ force: true });
-    }
+    // Zorunlu checkbox'a tıkla (button#agreeToTerms)
+    await page.locator('#agreeToTerms').click();
     await page.waitForTimeout(500);
     await page.getByRole('button', { name: 'Continue' }).click();
     await page.waitForTimeout(1500);
