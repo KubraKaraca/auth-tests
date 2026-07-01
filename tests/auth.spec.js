@@ -1,13 +1,10 @@
 const { test, expect } = require('@playwright/test');
 
-// Her test koşusunda benzersiz email oluşturuyoruz
 const timestamp = Date.now();
 const NEW_USER_EMAIL = `loopbtest+${timestamp}@gmail.com`;
 const NEW_USER_PASSWORD = 'TestPass1';
 
 test.describe('LoopB Auth Tests', () => {
-
-  // ── MEVCUT TESTLER ──────────────────────────────────────
 
   test('1 - Login sayfası açılıyor mu?', async ({ page }) => {
     await page.goto('https://app.loopb.com/auth/login');
@@ -39,37 +36,63 @@ test.describe('LoopB Auth Tests', () => {
     console.log('✅ Login → Register yönlendirmesi çalışıyor');
   });
 
-  // ── YENİ TESTLER ────────────────────────────────────────
-
   test('5 - Gerçek kullanıcı ile başarılı login', async ({ page }) => {
     await page.goto('https://app.loopb.com/auth/login');
-
-    // Email ve şifre gir
     await page.locator('input').first().fill('karacakubra89@gmail.com');
     await page.locator('input[type="password"]').fill('K123456');
     await page.locator('button').filter({ hasText: 'Login' }).click();
-
-    // Dashboard'a yönlendirmeli
     await page.waitForURL(/dashboard/, { timeout: 15000 });
     console.log('✅ Gerçek kullanıcı ile login başarılı');
   });
 
-  test('6 - Yeni kullanıcı kaydı (register)', async ({ page }) => {
+  test('6 - Yeni kullanıcı kaydı + onboarding + dashboard', async ({ page }) => {
+
+    // ── REGISTER ──────────────────────────────────────────
     await page.goto('https://app.loopb.com/auth/register');
-
-    // "Sign Up with Email" butonuna tıkla
     await page.getByText('Sign Up with Email').click();
-
-    // Email ve şifre doldur
     await page.locator('input[type="email"], input[placeholder*="email"]').fill(NEW_USER_EMAIL);
     await page.locator('input[type="password"], input[placeholder*="password"]').fill(NEW_USER_PASSWORD);
-
-    // Sign Up butonuna bas
     await page.getByRole('button', { name: 'Sign Up' }).click();
+    await page.waitForURL(/onboard/, { timeout: 20000 });
+    console.log('✅ Kayıt başarılı, onboarding başladı');
 
-    // Onboarding veya dashboard'a yönlendirmeli
-    await page.waitForURL(/onboard|dashboard/, { timeout: 20000 });
-    console.log(`✅ Yeni kullanıcı kaydı başarılı: ${NEW_USER_EMAIL}`);
+    // ── ONBOARDING ADIM 1: Ad, Soyad, Checkbox ────────────
+    await page.locator('input[placeholder*="first name"]').fill('Test');
+    await page.locator('input[placeholder*="last name"]').fill('Kullanici');
+    // İlk zorunlu checkbox'ı işaretle
+    await page.locator('input[type="checkbox"]').first().check();
+    await page.getByRole('button', { name: 'Continue' }).click();
+    await page.waitForTimeout(1500);
+    console.log('✅ Onboarding Adım 1 tamamlandı (Ad/Soyad)');
+
+    // ── ONBOARDING ADIM 2: Şirket Kurulumu ────────────────
+    // Zorunlu alan yok, direkt Continue
+    await page.getByRole('button', { name: 'Continue' }).click();
+    await page.waitForTimeout(1500);
+    console.log('✅ Onboarding Adım 2 tamamlandı (Şirket)');
+
+    // ── ONBOARDING ADIM 3: Kullanım Amacı ─────────────────
+    // Seçim zorunlu değil, direkt Continue
+    await page.getByRole('button', { name: 'Continue' }).click();
+    await page.waitForTimeout(1500);
+    console.log('✅ Onboarding Adım 3 tamamlandı (Kullanım amacı)');
+
+    // ── ONBOARDING ADIM 4: Takım Daveti ───────────────────
+    // Zorunlu değil, direkt Continue
+    await page.getByRole('button', { name: 'Continue' }).click();
+    await page.waitForTimeout(1500);
+    console.log('✅ Onboarding Adım 4 tamamlandı (Takım daveti)');
+
+    // ── ONBOARDING ADIM 5: Community Oluşturma ────────────
+    // Zorunlu değil, direkt Continue
+    await page.getByRole('button', { name: 'Continue' }).click();
+    await page.waitForTimeout(2000);
+    console.log('✅ Onboarding Adım 5 tamamlandı (Community)');
+
+    // ── "Setting things up..." animasyonu geçmesi ─────────
+    await page.waitForURL(/dashboard/, { timeout: 30000 });
+    console.log('✅ Onboarding tamamlandı, dashboard\'a ulaşıldı');
+
   });
 
 });
