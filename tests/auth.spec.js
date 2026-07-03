@@ -102,7 +102,9 @@ test.describe('LoopB Auth Tests', () => {
     console.log('✅ Onboarding Adım 4 tamamlandı (Takım daveti)');
     
     // ── ONBOARDING ADIM 5: Community Oluşturma ────────────
-    // Zorunlu değil, direkt Continue
+    // Community adı doldur ve devam et
+    await page.locator('textarea').first().fill('Hipposoft Test Community');
+    await page.waitForTimeout(500);
     await page.getByRole('button', { name: 'Continue' }).click();
     console.log('✅ Onboarding Adım 5 tamamlandı (Community)');
 
