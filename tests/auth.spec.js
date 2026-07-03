@@ -88,6 +88,8 @@ test.describe('LoopB Auth Tests', () => {
 
     // ── ONBOARDING ADIM 4: Takım Daveti ───────────────────
     // Her seferinde benzersiz bir davet e-postası oluştur
+    // Davet input'unun görünmesini bekle (sayfa tam yüklensin)
+    await page.locator('input[placeholder*="email"]').waitFor({ timeout: 10000 });
     const INVITE_EMAIL = `loopbinvite+${timestamp}@gmail.com`;
     await page.locator('input[placeholder*="email"]').fill(INVITE_EMAIL);
     await page.waitForTimeout(1000);
