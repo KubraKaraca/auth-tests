@@ -103,13 +103,23 @@ test.describe('LoopB Auth Tests', () => {
     
     // ── ONBOARDING ADIM 5: Community Oluşturma ────────────
     // Community adı doldur ve devam et
-    await page.locator('textarea').first().fill('Hipposoft Test Community');
-    await page.waitForTimeout(500);
-    await page.getByRole('button', { name: 'Continue' }).click();
-    console.log('✅ Onboarding Adım 5 tamamlandı (Community)');
+   await page.locator('textarea').first().fill('Hipposoft Test Community');
+   await page.waitForTimeout(500);
+   await page.getByRole('button', { name: 'Continue' }).click();
 
-    // ── "Setting things up..." animasyonu geçmesi ─────────
-    await page.waitForURL(/dashboard/, { timeout: 60000 });
+   // Loading bitmesini ve sonraki sayfaya geçişi bekle
+   await page.waitForFunction(
+   () => !document.querySelector('button[disabled]'),
+   { timeout: 15000 }
+   ).catch(() => {});
+   await page.waitForTimeout(3000);
+   console.log('✅ Onboarding Adım 5 tamamlandı (Community)');
+
+   // ── "Setting things up..." animasyonu veya dashboard ──
+   await page.waitForURL(/dashboard|onboard/, { timeout: 60000 });
+   if (page.url().includes('onboard')) {
+   await page.waitForURL(/dashboard/, { timeout: 60000 });
+}
     console.log('✅ Onboarding tamamlandı, dashboard\'a ulaşıldı');
 
   });
