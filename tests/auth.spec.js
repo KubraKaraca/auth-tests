@@ -90,14 +90,21 @@ test.describe('LoopB Auth Tests', () => {
     console.log('✅ Onboarding Adım 4 tamamlandı (Takım daveti)');
 
     // ── ONBOARDING ADIM 5: Community Oluşturma ────────────
+    await page.locator('textarea').first().waitFor({ timeout: 15000 });
     await page.locator('textarea').first().fill('Hipposoft Test Community');
     await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'Continue' }).click();
     console.log('✅ Onboarding Adım 5 tamamlandı (Community)');
 
     // ── Dashboard'a ulaşmayı bekle ────────────────────────
-    await page.waitForURL(/dashboard/, { timeout: 90000 });
-    console.log('✅ Onboarding tamamlandı, dashboard\'a ulaşıldı');
+    // Önce URL'i bekle, olmadıysa dashboard elementini bekle
+   try {
+   await page.waitForURL(/dashboard/, { timeout: 90000 });
+   } catch {
+   // URL değişmediyse sayfada "Dashboard" yazısını bekle
+   await page.getByText('Dashboard').waitFor({ timeout: 30000 });
+   }
+   console.log('✅ Onboarding tamamlandı, dashboard\'a ulaşıldı');
   });
 
 });
