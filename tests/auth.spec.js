@@ -1,11 +1,10 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('fs');
 
 const timestamp = Date.now();
 const NEW_USER_EMAIL = `loopbtest+${timestamp}@gmail.com`;
 const NEW_USER_PASSWORD = 'TestPass1';
-
-// Email adresini dosyaya yaz, workflow okusun
-const fs = require('fs');
+const INVITE_EMAIL = `loopbinvite+${timestamp}@gmail.com`;
 fs.writeFileSync('test-email.txt', NEW_USER_EMAIL);
 
 test.describe('LoopB Auth Tests', () => {
@@ -63,9 +62,6 @@ test.describe('LoopB Auth Tests', () => {
     // ── ONBOARDING ADIM 1: Ad, Soyad, Checkbox ────────────
     await page.locator('input[placeholder*="first name"]').fill('Test');
     await page.locator('input[placeholder*="last name"]').fill('Kullanici');
-    // İlk zorunlu checkbox'ı işaretle
-    // Checkbox'ı birkaç farklı yöntemle dene
-    // Zorunlu checkbox'a tıkla (button#agreeToTerms)
     await page.locator('#agreeToTerms').click();
     await page.waitForTimeout(500);
     await page.getByRole('button', { name: 'Continue' }).click();
@@ -73,7 +69,6 @@ test.describe('LoopB Auth Tests', () => {
     console.log('✅ Onboarding Adım 1 tamamlandı (Ad/Soyad)');
 
     // ── ONBOARDING ADIM 2: Şirket Kurulumu ────────────────
-    // Şirket adını temizle ve "Hipposoft Test" yaz
     await page.locator('#companyName').clear();
     await page.locator('#companyName').fill('Hipposoft Test');
     await page.getByRole('button', { name: 'Continue' }).click();
@@ -81,43 +76,28 @@ test.describe('LoopB Auth Tests', () => {
     console.log('✅ Onboarding Adım 2 tamamlandı (Şirket)');
 
     // ── ONBOARDING ADIM 3: Kullanım Amacı ─────────────────
-    // Seçim zorunlu değil, direkt Continue
     await page.getByRole('button', { name: 'Continue' }).click();
     await page.waitForTimeout(1500);
     console.log('✅ Onboarding Adım 3 tamamlandı (Kullanım amacı)');
 
     // ── ONBOARDING ADIM 4: Takım Daveti ───────────────────
-    // Her seferinde benzersiz bir davet e-postası oluştur
-    // Davet input'unun görünmesini bekle (sayfa tam yüklensin)
     await page.locator('input[placeholder*="email"]').waitFor({ timeout: 10000 });
-    const INVITE_EMAIL = `loopbinvite+${timestamp}@gmail.com`;
     await page.locator('input[placeholder*="email"]').fill(INVITE_EMAIL);
     await page.waitForTimeout(1000);
-    console.log(`✅ Davet e-postası girildi: ${INVITE_EMAIL}`);
-    // Butonu bekle ve tıkla
     await page.getByRole('button', { name: 'Continue' }).waitFor({ timeout: 10000 });
     await page.getByRole('button', { name: 'Continue' }).click();
-    // Adım 5'in yüklenmesini bekle (Community sayfası)
     await page.getByText('Create your first community').waitFor({ timeout: 15000 });
     console.log('✅ Onboarding Adım 4 tamamlandı (Takım daveti)');
-    
+
     // ── ONBOARDING ADIM 5: Community Oluşturma ────────────
-    // Community adı doldur ve devam et
-   await page.locator('textarea').first().fill('Hipposoft Test Community');
-   await page.waitForTimeout(500);
-   await page.getByRole('button', { name: 'Continue' }).click();
+    await page.locator('textarea').first().fill('Hipposoft Test Community');
+    await page.waitForTimeout(1000);
+    await page.getByRole('button', { name: 'Continue' }).click();
+    console.log('✅ Onboarding Adım 5 tamamlandı (Community)');
 
-   // Loading bitmesini ve sonraki sayfaya geçişi bekle
-   await page.locator('textarea').first().fill('Hipposoft Test Community');
-   await page.waitForTimeout(1000);
-   await page.getByRole('button', { name: 'Continue' }).click();
-   console.log('✅ Onboarding Adım 5 tamamlandı (Community)');
-
-   // ── Dashboard'a ulaşmayı bekle (animasyon dahil) ──────
-   await page.waitForURL(/dashboard/, { timeout: 90000, waitUntil: 'domcontentloaded' });
-}
+    // ── Dashboard'a ulaşmayı bekle ────────────────────────
+    await page.waitForURL(/dashboard/, { timeout: 90000 });
     console.log('✅ Onboarding tamamlandı, dashboard\'a ulaşıldı');
-
   });
 
 });
