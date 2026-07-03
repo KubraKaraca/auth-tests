@@ -56,7 +56,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "${{ steps.result.outputs.emoji }} LoopB Auth Test Sonucu — ${{ steps.result.outputs.status }}"
-          to: halil.cicibas@hipposoft.net, kubra.kaba@hipposoft.net
+          to: karacakubra89@gmail.com, kubra.kaba@hipposoft.net
           from: LoopB Test Sistemi <${{ secrets.MAIL_USERNAME }}>
           html_body: |
             <div style="font-family: Arial, sans-serif; max-width: 600px;">
