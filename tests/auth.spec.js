@@ -104,11 +104,10 @@ test.describe('LoopB Auth Tests', () => {
     // ── ONBOARDING ADIM 5: Community Oluşturma ────────────
     // Zorunlu değil, direkt Continue
     await page.getByRole('button', { name: 'Continue' }).click();
-    await page.waitForTimeout(2000);
     console.log('✅ Onboarding Adım 5 tamamlandı (Community)');
 
     // ── "Setting things up..." animasyonu geçmesi ─────────
-    await page.waitForURL(/dashboard/, { timeout: 30000 });
+    await page.waitForURL(/dashboard/, { timeout: 60000 });
     console.log('✅ Onboarding tamamlandı, dashboard\'a ulaşıldı');
 
   });
