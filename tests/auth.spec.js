@@ -89,11 +89,13 @@ test.describe('LoopB Auth Tests', () => {
     // ── ONBOARDING ADIM 4: Takım Daveti ───────────────────
     // Her seferinde benzersiz bir davet e-postası oluştur
     const INVITE_EMAIL = `loopbinvite+${timestamp}@gmail.com`;
-    await page.locator('input[type="email"], input[placeholder*="email"]').fill(INVITE_EMAIL);
-    await page.waitForTimeout(500);
+    await page.locator('input[placeholder*="email"]').fill(INVITE_EMAIL);
+    await page.waitForTimeout(1000);
     console.log(`✅ Davet e-postası girildi: ${INVITE_EMAIL}`);
+    // Butonu bekle ve tıkla
+    await page.getByRole('button', { name: 'Continue' }).waitFor({ timeout: 10000 });
     await page.getByRole('button', { name: 'Continue' }).click();
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(3000);
     console.log('✅ Onboarding Adım 4 tamamlandı (Takım daveti)');
 
     // ── ONBOARDING ADIM 5: Community Oluşturma ────────────
