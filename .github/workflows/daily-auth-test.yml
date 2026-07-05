@@ -1,8 +1,6 @@
 name: LoopB Günlük Auth Testi
 
 on:
-  schedule:
-    - cron: '0 6 * * *'  # Her gün 09:00 TSİ (UTC+3)
   workflow_dispatch:
       
 jobs:
