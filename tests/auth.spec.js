@@ -99,12 +99,11 @@ test.describe('LoopB Auth Tests', () => {
     // ── Dashboard'a ulaşmayı bekle ────────────────────────
     // Önce URL'i bekle, olmadıysa dashboard elementini bekle
    try {
-   await page.waitForURL(/dashboard/, { timeout: 90000 });
-   } catch {
-   // URL değişmediyse sayfada "Dashboard" yazısını bekle
-   await page.getByText('Dashboard').waitFor({ timeout: 60000 });
-   }
-   console.log('✅ Onboarding tamamlandı, dashboard\'a ulaşıldı');
+  await page.waitForURL(/dashboard/, { timeout: 90000 });
+  } catch {
+  await page.getByText('Dashboard').waitFor({ timeout: 90000 });
+  }
+  console.log('✅ Onboarding tamamlandı, dashboard\'a ulaşıldı');
   });
 
 });
