@@ -92,8 +92,10 @@ test.describe('LoopB Auth Tests', () => {
     // ── ONBOARDING ADIM 5: Community Oluşturma ────────────
     await page.locator('textarea').first().waitFor({ timeout: 15000 });
     await page.locator('textarea').first().fill('Hipposoft Test Community');
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(2000);
     await page.getByRole('button', { name: 'Continue' }).click();
+    // Butonun loading durumuna geçmesini bekle
+    await page.waitForTimeout(3000);
     console.log('✅ Onboarding Adım 5 tamamlandı (Community)');
 
     // ── Dashboard'a ulaşmayı bekle ────────────────────────
