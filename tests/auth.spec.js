@@ -99,13 +99,16 @@ test.describe('LoopB Auth Tests', () => {
     console.log('✅ Onboarding Adım 5 tamamlandı (Community)');
 
     // ── Dashboard'a ulaşmayı bekle ────────────────────────
-    // Önce URL'i bekle, olmadıysa dashboard elementini bekle
-   try {
+   // Dashboard veya "Setting things up" animasyonunu bekle
+   await page.waitForURL(/dashboard|onboard/, { timeout: 90000 });
+
+   // Eğer hâlâ onboard'daysa dashboard'a geçişi bekle
+  if (page.url().includes('onboard')) {
   await page.waitForURL(/dashboard/, { timeout: 90000 });
-  } catch {
-  await page.getByText('Dashboard').waitFor({ timeout: 90000 });
   }
+
+  // Son kontrol — dashboard yüklendi mi
+  await expect(page).toHaveURL(/dashboard/, { timeout: 10000 });
   console.log('✅ Onboarding tamamlandı, dashboard\'a ulaşıldı');
   });
-
 });
