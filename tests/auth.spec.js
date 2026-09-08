@@ -92,7 +92,10 @@ test.describe('LoopB Auth Tests', () => {
     // ── ONBOARDING ADIM 5: Community Oluşturma ────────────
     await page.locator('textarea').first().waitFor({ timeout: 15000 });
     await page.locator('textarea').first().fill('Hipposoft Test Community');
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(1000);
+    // Community Type seç (zorunlu alan) — "Social" seçiyoruz
+    await page.getByText('Social').click();
+    await page.waitForTimeout(1000);
     // Continue'ya tıkla, gerekirse tekrar dene
     await page.getByRole('button', { name: 'Continue' }).click();
     await page.waitForTimeout(5000);
